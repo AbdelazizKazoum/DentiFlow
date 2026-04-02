@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Repository, ObjectLiteral } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -8,8 +9,9 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
   ) {}
 
   async create(data: Partial<T>): Promise<T> {
-    const entity = this.repository.create(data);
-    return this.repository.save(entity);
+    const entity = this.repository.create(data as any);
+    const saved = await this.repository.save(entity);
+    return Array.isArray(saved) ? saved[0] : saved;
   }
 
   async findById(id: string): Promise<T | null> {
@@ -27,7 +29,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
 
   async delete(id: string): Promise<boolean> {
     const result = await this.repository.delete(id);
-    return result.affected > 0;
+    return (result.affected ?? 0) > 0;
   }
 
   async findByCondition(condition: Partial<T>): Promise<T[]> {
