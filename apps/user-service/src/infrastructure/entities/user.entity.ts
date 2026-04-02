@@ -1,0 +1,21 @@
+import { Entity, Column } from 'typeorm';
+import { BaseEntity } from '@app/database';
+import { UserRole } from '../domain/value-objects/user-role.enum';
+
+@Entity('users')
+export class UserEntity extends BaseEntity {
+  @Column()
+  name: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+  })
+  role: UserRole;
+}
