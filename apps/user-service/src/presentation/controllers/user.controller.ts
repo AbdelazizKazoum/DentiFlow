@@ -15,8 +15,8 @@ import { DeleteUserUseCase } from '../../application/use-cases/delete-user.use-c
 import {
   CreateUserRequestDto,
   UpdateUserRequestDto,
-} from '../../application/dtos/user-request.dto';
-import { UserResponseDto } from '../../application/dtos/user-response.dto';
+} from '../dtos/user-request.dto';
+import { UserResponseDto } from '../dtos/user-response.dto';
 
 @Controller('users')
 export class UserController {
