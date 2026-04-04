@@ -5,7 +5,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
+import { UserOrmEntity } from './user.orm-entity';
 
 @Entity('clinics')
 export class ClinicOrmEntity {
@@ -17,6 +21,13 @@ export class ClinicOrmEntity {
 
   @Column('uuid')
   owner_id: string;
+
+  @ManyToOne(() => UserOrmEntity, { nullable: false })
+  @JoinColumn({ name: 'owner_id' })
+  owner: UserOrmEntity;
+
+  @OneToMany(() => UserOrmEntity, (user) => user.clinic)
+  users: UserOrmEntity[];
 
   @Column({ type: 'int', default: 10 })
   discount_threshold_percent: number;

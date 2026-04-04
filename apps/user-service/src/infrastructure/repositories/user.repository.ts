@@ -22,22 +22,22 @@ export class UserRepository
   async create(
     User: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<User> {
-    const entity = await super.create(User);
+    const entity = await this._create(User);
     return this.mapToDomain(entity);
   }
 
   async findById(id: string): Promise<User | null> {
-    const entity = await super.findById(id);
+    const entity = await this._findById(id);
     return entity ? this.mapToDomain(entity) : null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const entity = await this.findOneByCondition({ email });
+    const entity = await this._findOneByCondition({ email });
     return entity ? this.mapToDomain(entity) : null;
   }
 
   async findAll(): Promise<User[]> {
-    const entities = await super.findAll();
+    const entities = await this._findAll();
     return entities.map((entity) => this.mapToDomain(entity));
   }
 
@@ -45,12 +45,12 @@ export class UserRepository
     id: string,
     updateData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<User | null> {
-    const entity = await super.update(id, updateData);
+    const entity = await this._update(id, updateData as any);
     return entity ? this.mapToDomain(entity) : null;
   }
 
   async delete(id: string): Promise<boolean> {
-    return super.delete(id);
+    return this._delete(id);
   }
 
   private mapToDomain(entity: UserOrmEntity): User {

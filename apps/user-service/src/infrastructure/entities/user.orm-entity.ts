@@ -1,11 +1,16 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from 'libs/database';
 import { UserRole } from '../../domain/value-objects/user-role.enum';
+import { ClinicOrmEntity } from './clinic.orm-entity';
 
 @Entity('users')
 export class UserOrmEntity extends BaseEntity {
   @Column('uuid')
   clinic_id: string;
+
+  @ManyToOne(() => ClinicOrmEntity, { nullable: false })
+  @JoinColumn({ name: 'clinic_id' })
+  clinic: ClinicOrmEntity;
 
   @Column()
   email: string;

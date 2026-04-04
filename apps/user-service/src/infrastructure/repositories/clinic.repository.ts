@@ -6,8 +6,6 @@ import { AbstractRepository } from 'libs/database';
 import { Clinic } from '../../domain/entities/clinic.entity';
 import { IClinicRepository } from '../../domain/repositories/clinic.repository.interface';
 import { ClinicOrmEntity } from '../entities/clinic.orm-entity';
-import { CreateClinicDto } from '../../presentation/dtos/create-clinic.dto';
-import { UpdateClinicDto } from '../../presentation/dtos/update-clinic.dto';
 
 @Injectable()
 export class ClinicRepository
@@ -21,35 +19,37 @@ export class ClinicRepository
     super(repository);
   }
 
-  async create(createClinicData: CreateClinicDto): Promise<Clinic> {
-    const entity = await super.create(createClinicData);
+  async create(
+    createClinicData: Omit<Clinic, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<Clinic> {
+    const entity = await this._create(createClinicData as any);
     return this.mapToDomain(entity);
   }
 
   async findById(id: string): Promise<Clinic | null> {
-    const entity = await super.findById(id);
+    const entity = await this._findById(id);
     return entity ? this.mapToDomain(entity) : null;
   }
 
   async findAll(): Promise<Clinic[]> {
-    const entities = await super.findAll();
+    const entities = await this._findAll();
     return entities.map((entity) => this.mapToDomain(entity));
   }
 
   async update(
     id: string,
-    updateData: UpdateClinicDto,
+    updateData: Omit<Clinic, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Clinic | null> {
-    const entity = await super.update(id, updateData);
+    const entity = await this._update(id, updateData as any);
     return entity ? this.mapToDomain(entity) : null;
   }
 
   async delete(id: string): Promise<boolean> {
-    return super.delete(id);
+    return this._delete(id);
   }
 
   async findByOwnerId(ownerId: string): Promise<Clinic[]> {
-    const entities = await this.findByCondition({ owner_id: ownerId });
+    const entities = await this._findByCondition({ owner_id: ownerId });
     return entities.map((entity) => this.mapToDomain(entity));
   }
 
