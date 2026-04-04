@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 export enum UserRole {
-  SECRETARIAT = 'secretariat',
+  SECRETARY = 'secretary',
   DENTIST = 'dentist',
-  CABINET_OWNER = 'cabinet_owner',
+  OWNER_ADMIN = 'owner_admin',
 }

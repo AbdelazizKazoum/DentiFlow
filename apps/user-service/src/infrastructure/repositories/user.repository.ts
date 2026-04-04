@@ -20,9 +20,9 @@ export class UserRepository
   }
 
   async create(
-    createUserDto: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
+    User: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<User> {
-    const entity = await super.create(createUserDto);
+    const entity = await super.create(User);
     return this.mapToDomain(entity);
   }
 
@@ -56,10 +56,12 @@ export class UserRepository
   private mapToDomain(entity: UserOrmEntity): User {
     return new User(
       entity.id,
-      entity.name,
+      entity.clinic_id,
       entity.email,
       entity.password,
+      entity.full_name,
       entity.role,
+      entity.is_active,
       entity.createdAt,
       entity.updatedAt,
     );

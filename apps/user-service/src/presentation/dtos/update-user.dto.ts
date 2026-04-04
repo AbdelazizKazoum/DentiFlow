@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { UserRole } from '../../domain/value-objects/user-role.enum';
+import { UserOrmEntity } from '../../infrastructure/entities/user.orm-entity';
 
-export interface UpdateUserDto {
-  name?: string;
-  email?: string;
-  role?: UserRole;
-}
+export type UpdateUserDto = Partial<
+  Pick<UserOrmEntity, 'email' | 'full_name' | 'role' | 'is_active'>
+>;

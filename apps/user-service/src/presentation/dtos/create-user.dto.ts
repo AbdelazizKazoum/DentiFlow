@@ -1,9 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { UserRole } from '../../domain/value-objects/user-role.enum';
+import { UserOrmEntity } from '../../infrastructure/entities/user.orm-entity';
 
-export interface CreateUserDto {
-  name: string;
-  email: string;
-  password: string;
-  role: UserRole;
-}
+export type CreateUserDto = Pick<
+  UserOrmEntity,
+  'clinic_id' | 'email' | 'full_name' | 'role'
+> & { is_active?: boolean };
