@@ -1,28 +1,27 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AbstractRepository } from 'libs/database';
 import { User } from '../../domain/entities/user.entity';
-import { UserEntity } from '../entities/user.entity';
-import {
-  IUserRepository,
-  CreateUserDto,
-  UpdateUserDto,
-} from '../../domain/repositories/user.repository.interface';
+import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { UserOrmEntity } from '../entities/user.orm-entity';
 
 @Injectable()
 export class UserRepository
-  extends AbstractRepository<UserEntity>
+  extends AbstractRepository<UserOrmEntity>
   implements IUserRepository
 {
   constructor(
-    @InjectRepository(UserEntity)
-    repository: Repository<UserEntity>,
+    @InjectRepository(UserOrmEntity)
+    repository: Repository<UserOrmEntity>,
   ) {
     super(repository);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(
+    createUserDto: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<User> {
     const entity = await super.create(createUserDto);
     return this.mapToDomain(entity);
   }
@@ -42,7 +41,10 @@ export class UserRepository
     return entities.map((entity) => this.mapToDomain(entity));
   }
 
-  async update(id: string, updateData: UpdateUserDto): Promise<User | null> {
+  async update(
+    id: string,
+    updateData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<User | null> {
     const entity = await super.update(id, updateData);
     return entity ? this.mapToDomain(entity) : null;
   }
@@ -51,7 +53,7 @@ export class UserRepository
     return super.delete(id);
   }
 
-  private mapToDomain(entity: UserEntity): User {
+  private mapToDomain(entity: UserOrmEntity): User {
     return new User(
       entity.id,
       entity.name,

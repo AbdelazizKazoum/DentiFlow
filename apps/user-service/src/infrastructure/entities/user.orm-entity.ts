@@ -3,7 +3,7 @@ import { BaseEntity } from 'libs/database';
 import { UserRole } from '../../domain/value-objects/user-role.enum';
 
 @Entity('users')
-export class UserEntity extends BaseEntity {
+export class UserOrmEntity extends BaseEntity {
   @Column()
   name: string;
 
