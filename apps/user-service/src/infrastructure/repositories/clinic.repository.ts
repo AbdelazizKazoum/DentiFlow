@@ -22,7 +22,7 @@ export class ClinicRepository
   async create(
     createClinicData: Omit<Clinic, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Clinic> {
-    const entity = await this._create(createClinicData as any);
+    const entity = await this._create(createClinicData);
     return this.mapToDomain(entity);
   }
 
@@ -40,7 +40,7 @@ export class ClinicRepository
     id: string,
     updateData: Omit<Clinic, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Clinic | null> {
-    const entity = await this._update(id, updateData as any);
+    const entity = await this._update(id, updateData);
     return entity ? this.mapToDomain(entity) : null;
   }
 

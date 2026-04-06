@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mysql:
     image: mysql:8.0
@@ -15,19 +17,22 @@ services:
   user-service:
     build:
       context: .
-      dockerfile: apps/user-service/Dockerfile
+      dockerfile: apps/user-service/Dockerfile.dev
     ports:
       - '3001:3001'
     depends_on:
       - mysql
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=3001
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_USERNAME=dentiflow
       - DB_PASSWORD=dentiflow123
       - DB_DATABASE=dentiflow
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
 volumes:
   mysql_data:
