@@ -45,7 +45,7 @@ export class UserRepository
     id: string,
     updateData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<User | null> {
-    const entity = await this._update(id, updateData as any);
+    const entity = await this._update(id, updateData);
     return entity ? this.mapToDomain(entity) : null;
   }
 

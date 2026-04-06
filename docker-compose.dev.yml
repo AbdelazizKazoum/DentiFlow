@@ -14,6 +14,96 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  api-gateway:
+    build:
+      context: .
+      dockerfile: apps/api-gateway/Dockerfile.dev
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mysql
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=dentiflow
+      - DB_PASSWORD=dentiflow123
+      - DB_DATABASE=dentiflow
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command:
+      [
+        'npx',
+        'nest',
+        'start',
+        'api-gateway',
+        '--watch',
+        '--watchOptions',
+        '{"usePolling": true}',
+      ]
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: apps/auth-service/Dockerfile.dev
+    ports:
+      - '3002:3002'
+    depends_on:
+      - mysql
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=dentiflow
+      - DB_PASSWORD=dentiflow123
+      - DB_DATABASE=dentiflow
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command:
+      [
+        'npx',
+        'nest',
+        'start',
+        'auth-service',
+        '--watch',
+        '--watchOptions',
+        '{"usePolling": true}',
+      ]
+
+  patient-service:
+    build:
+      context: .
+      dockerfile: apps/patient-service/Dockerfile.dev
+    ports:
+      - '3003:3003'
+    depends_on:
+      - mysql
+    environment:
+      - NODE_ENV=development
+      - PORT=3003
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=dentiflow
+      - DB_PASSWORD=dentiflow123
+      - DB_DATABASE=dentiflow
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command:
+      [
+        'npx',
+        'nest',
+        'start',
+        'patient-service',
+        '--watch',
+        '--watchOptions',
+        '{"usePolling": true}',
+      ]
+
   user-service:
     build:
       context: .
@@ -33,6 +123,16 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    command:
+      [
+        'npx',
+        'nest',
+        'start',
+        'user-service',
+        '--watch',
+        '--watchOptions',
+        '{"usePolling": true}',
+      ]
 
 volumes:
   mysql_data:

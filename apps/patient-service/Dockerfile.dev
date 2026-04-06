@@ -8,5 +8,5 @@ COPY nest-cli.json ./
 
 RUN npm install
 
-COPY apps/user-service ./apps/user-service
+COPY apps/patient-service ./apps/patient-service
 COPY libs ./libs

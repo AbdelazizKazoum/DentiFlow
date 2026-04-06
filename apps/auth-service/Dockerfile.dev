@@ -8,5 +8,5 @@ COPY nest-cli.json ./
 
 RUN npm install
 
-COPY apps/user-service ./apps/user-service
+COPY apps/auth-service ./apps/auth-service
 COPY libs ./libs
