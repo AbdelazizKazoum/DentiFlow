@@ -8,7 +8,7 @@ export class UserOrmEntity extends BaseEntity {
   @Column('uuid')
   clinic_id: string;
 
-  @ManyToOne(() => ClinicOrmEntity, { nullable: false })
+  @ManyToOne(() => ClinicOrmEntity, { nullable: false, lazy: true })
   @JoinColumn({ name: 'clinic_id' })
   clinic: ClinicOrmEntity;
 

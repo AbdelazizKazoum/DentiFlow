@@ -1,3 +1,10 @@
+x-db-env: &db-env
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_USERNAME: dentiflow
+  DB_PASSWORD: dentiflow123
+  DB_DATABASE: dentiflow
+
 services:
   mysql:
     image: mysql:8.0
@@ -11,6 +18,12 @@ services:
       - '3305:3306'
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysql', '-u', 'root', '-prootpassword', '-e', 'SELECT 1']
+      start_period: 60s
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   user-service:
     build:
@@ -19,15 +32,12 @@ services:
     ports:
       - '3001:3001'
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
-      - NODE_ENV=production
-      - PORT=3001
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USERNAME=dentiflow
-      - DB_PASSWORD=dentiflow123
-      - DB_DATABASE=dentiflow
+      <<: *db-env
+      NODE_ENV: production
+      PORT: 3001
 
 volumes:
   mysql_data:

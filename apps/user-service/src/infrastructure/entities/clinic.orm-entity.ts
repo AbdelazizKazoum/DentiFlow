@@ -22,7 +22,7 @@ export class ClinicOrmEntity {
   @Column('uuid')
   owner_id: string;
 
-  @ManyToOne(() => UserOrmEntity, { nullable: false })
+  @ManyToOne(() => UserOrmEntity, { nullable: true, lazy: true })
   @JoinColumn({ name: 'owner_id' })
   owner: UserOrmEntity;
 
