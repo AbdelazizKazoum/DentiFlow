@@ -17,6 +17,9 @@ import {
   UpdateUserRequestDto,
 } from '../dtos/user-request.dto';
 import { UserResponseDto } from '../dtos/user-response.dto';
+import { CreateUserCommand } from '../../application/commands/create-user.command';
+import { UpdateUserCommand } from '../../application/commands/update-user.command';
+import { DeleteUserCommand } from '../../application/commands/delete-user.command';
 
 @Controller('users')
 export class UserController {
@@ -32,7 +35,14 @@ export class UserController {
   async create(
     @Body() createUserDto: CreateUserRequestDto,
   ): Promise<UserResponseDto> {
-    const user = await this.createUserUseCase.execute(createUserDto);
+    const command = new CreateUserCommand(
+      createUserDto.clinic_id,
+      createUserDto.email,
+      createUserDto.full_name,
+      createUserDto.role,
+      createUserDto.is_active,
+    );
+    const user = await this.createUserUseCase.execute(command);
     return new UserResponseDto(user);
   }
 
@@ -53,13 +63,20 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserRequestDto,
   ): Promise<UserResponseDto | null> {
-    const user = await this.updateUserUseCase.execute(id, updateUserDto);
+    const command = new UpdateUserCommand(
+      updateUserDto.email,
+      updateUserDto.full_name,
+      updateUserDto.role,
+      updateUserDto.is_active,
+    );
+    const user = await this.updateUserUseCase.execute(id, command);
     return user ? new UserResponseDto(user) : null;
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<{ deleted: boolean }> {
-    const deleted = await this.deleteUserUseCase.execute(id);
+    const command = new DeleteUserCommand(id);
+    const deleted = await this.deleteUserUseCase.execute(command);
     return { deleted };
   }
 }

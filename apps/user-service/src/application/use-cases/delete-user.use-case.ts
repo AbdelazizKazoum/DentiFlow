@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { DeleteUserCommand } from '../commands/delete-user.command';
 
 @Injectable()
 export class DeleteUserUseCase {
@@ -8,7 +9,7 @@ export class DeleteUserUseCase {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(id: string): Promise<boolean> {
-    return this.userRepository.delete(id);
+  async execute(command: DeleteUserCommand): Promise<boolean> {
+    return this.userRepository.delete(command.id);
   }
 }
